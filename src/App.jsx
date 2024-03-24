@@ -1,35 +1,44 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Content from "./components/Content/Content";
+import NavBar from "./components/Navbar/NavBar";
+import Slogan from "./components/Slogan/Slogan";
+import {useEffect, useState} from 'react';
 
-function App() {
-  const [count, setCount] = useState(0)
+
+export default function App() {
+  const [windowSize, setWindowSize] = useState({
+    width: undefined,
+    height: undefined
+  });
+
+  const [isMobile, setMobile] = useState(false);
+
+  useEffect(() => {
+    const handleSize = () => {
+      console.log("abc");
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      })
+    }
+    window.addEventListener("resize", handleSize);
+    handleSize();
+    return () => window.removeEventListener("resize", handleSize);
+  }, [])
+
+  useEffect(() => {
+    if(windowSize.width < 500) {
+      setMobile(true);
+    }
+    else {
+      setMobile(false);
+    }
+  }, [windowSize]);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className="font-sora overflow-y-auto overflow-x-hidden h-screen p-5 bg-gradient-to-b dark:from-purple-900 dark:to-purple-700 dark:text-white text-black md:px-20 from-white to-pink-500">
+      <NavBar isMobile={isMobile}/>
+      <Slogan/>
+      <Content/>
+    </div>
   )
 }
-
-export default App
